@@ -2,14 +2,13 @@ import org.apache.tools.ant.taskdefs.condition.Os
 
 ext {
     // The drivers we want to use
-    drivers = ["firefox", "chrome", "phantomJs"]
+    drivers = ["chrome"]
 
     ext {
         groovyVersion = '2.4.5'
         gebVersion = '1.0'
-        seleniumVersion = '2.51.0'
-        chromeDriverVersion = '2.24'
-        phantomJsVersion = '1.9.7'
+        seleniumVersion = '3.0.1'
+        chromeDriverVersion = '2.25'
     }
 }
 
@@ -61,16 +60,12 @@ drivers.each { driver ->
 
 chromeTest {
     dependsOn unzipChromeDriver
+    testLogging {
+        events "passed", "skipped", "failed", "standardOut", "standardError"
+    }
 
     def chromedriverFilename = Os.isFamily(Os.FAMILY_WINDOWS) ? "chromedriver.exe" : "chromedriver"
     systemProperty "webdriver.chrome.driver", new File(unzipChromeDriver.outputs.files.singleFile, chromedriverFilename).absolutePath
-}
-
-phantomJsTest {
-    dependsOn unzipPhantomJs
-
-    def phantomJsFilename = Os.isFamily(Os.FAMILY_WINDOWS) ? "phantomjs.exe" : "bin/phantomjs"
-    systemProperty "phantomjs.binary.path", new File(unzipPhantomJs.outputs.files.singleFile, phantomJsFilename).absolutePath
 }
 
 test {
