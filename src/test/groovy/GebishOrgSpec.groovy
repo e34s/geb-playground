@@ -1,5 +1,7 @@
 import geb.spock.GebReportingSpec
 
+/*
+
 class GebishOrgSpec extends GebReportingSpec {
 
     def "can get to the current Book of Geb"() {
@@ -21,3 +23,5 @@ class GebishOrgSpec extends GebReportingSpec {
         at TheBookOfGebPage
     }
 }
+
+*/

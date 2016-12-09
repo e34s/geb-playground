@@ -18,6 +18,8 @@ apply from: "gradle/osSpecificDownloads.gradle"
 
 repositories {
     mavenCentral()
+    jcenter()
+
 }
 
 dependencies {
@@ -29,7 +31,11 @@ dependencies {
     testCompile "org.codehaus.groovy:groovy-all:$groovyVersion"
 
     // If using JUnit, need to depend on geb-junit (3 or 4)
-    testCompile "org.gebish:geb-junit4:$gebVersion"
+    //testCompile "org.gebish:geb-junit4:$gebVersion"
+
+    //adding testng
+    testCompile 'org.testng:testng:6.9.12'
+
 
     // Drivers
     testCompile "org.seleniumhq.selenium:selenium-chrome-driver:$seleniumVersion"
@@ -68,9 +74,41 @@ chromeTest {
     systemProperty "webdriver.chrome.driver", new File(unzipChromeDriver.outputs.files.singleFile, chromedriverFilename).absolutePath
 }
 
+task first {
+    doLast {
+        println 'first task'
+    }
+}
+
+task second(dependsOn: 'first') {
+    doLast {
+        println 'second task'
+    }
+}
+
+
+test {
+
+    useTestNG()
+    testLogging.showStandardStreams = true
+
+    testLogging {
+        events "passed", "skipped", "failed", "standardOut", "standardError"
+    }
+    println("running test task")
+
+
+}
+
+/*
 test {
     dependsOn drivers.collect { tasks["${it}Test"] }
     enabled = false
+
+    testLogging {
+        events "passed", "skipped", "failed", "standardOut", "standardError"
+    }
 }
+*/
 
 apply from: "gradle/ci.gradle"
