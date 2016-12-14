@@ -35,7 +35,20 @@ Please ask questions on [Geb user mailing list][mailing_list] and raise issues i
 - http://stackoverflow.com/questions/29357333/quit-driver-after-each-geb-spock-test : browser potentially cannot be quit after each test / implications on reporting 
 
 
+## Run testng tests
+- testngtests task is defined in *build.gradle*  
+- `./gradlew testngtests`
+- to include / exclude testng groups ànd select the parallelization level, edit the section 
+```java
+    useTestNG() {
+        includeGroups 'e2e'
+        options.parallel = 'methods' //modes: methods, tests, classes or instances.
+        options.threadCount = 4
+    }
+```
 
-[build_status]: https://snap-ci.com/geb/geb-example-gradle/branch/master/build_image "Build Status"
-[mailing_list]: https://groups.google.com/forum/#!forum/geb-user
-[issue_tracker]: https://github.com/geb/issues/issues
+- junittests task is defined in *build.gradle* 
+- `/gradlew junittets`
+- only classes can run in parallel 
+- number of classes in parallel can be set with maxParallelForks` parameter (in junittest task)
+

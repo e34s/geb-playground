@@ -7,7 +7,7 @@ ext {
     ext {
         groovyVersion = '2.4.7'
         gebVersion = '1.0'
-        seleniumVersion = '2.53.1'
+        seleniumVersion = '3.0.1'
         chromeDriverVersion = '2.25'
     }
 }
@@ -41,48 +41,48 @@ dependencies {
 
     // Drivers
     testCompile "org.seleniumhq.selenium:selenium-chrome-driver:$seleniumVersion"
-    //testCompile "org.seleniumhq.selenium:selenium-firefox-driver:$seleniumVersion"
+    testCompile "org.seleniumhq.selenium:selenium-firefox-driver:$seleniumVersion"
 
 }
 
-drivers.each { driver ->
-    task "${driver}Test"(type: Test) {
-        reports {
-            html.destination = reporting.file("$name/tests")
-            junitXml.destination = file("$buildDir/test-results/$name")
-        }
+//drivers.each { driver ->
+//    task "${driver}Test"(type: Test) {
+//        reports {
+//            html.destination = reporting.file("$name/tests")
+//            junitXml.destination = file("$buildDir/test-results/$name")
+//        }
+//
+//        outputs.upToDateWhen { false }  // Always run tests
+//
+//        systemProperty "geb.build.reportsDir", reporting.file("$name/geb")
+//        systemProperty "geb.env", driver
+//
+//        println("IN DRIVERS.EACH: " + driver)
+//
+//        // If you wanted to set the baseUrl in your build…
+//        // systemProperty "geb.build.baseUrl", "http://myapp.com"
+//    }
+//}
 
-        outputs.upToDateWhen { false }  // Always run tests
-
-        systemProperty "geb.build.reportsDir", reporting.file("$name/geb")
-        systemProperty "geb.env", driver
-
-        println("IN DRIVERS.EACH: " + driver)
-
-        // If you wanted to set the baseUrl in your build…
-        // systemProperty "geb.build.baseUrl", "http://myapp.com"
-    }
-}
-
-chromeTest {
-
-    println("entering chromeTest")
-
-    /*
-    println(" +++++ ENTERING CHROMETEST +++++++")
-    dependsOn unzipChromeDriver
-    testLogging {
-        events "passed", "skipped", "failed", "standardOut", "standardError"
-    }
-
-    def chromedriverFilename = Os.isFamily(Os.FAMILY_WINDOWS) ? "chromedriver.exe" : "chromedriver"
-    systemProperty "webdriver.chrome.driver", new File(unzipChromeDriver.outputs.files.singleFile, chromedriverFilename).absolutePath
-*/
-}
-
-palotasTest {
-    print("entering palotasTest")
-}
+//chromeTest {
+//
+//    println("entering chromeTest")
+//
+//    /*
+//    println(" +++++ ENTERING CHROMETEST +++++++")
+//    dependsOn unzipChromeDriver
+//    testLogging {
+//        events "passed", "skipped", "failed", "standardOut", "standardError"
+//    }
+//
+//    def chromedriverFilename = Os.isFamily(Os.FAMILY_WINDOWS) ? "chromedriver.exe" : "chromedriver"
+//    systemProperty "webdriver.chrome.driver", new File(unzipChromeDriver.outputs.files.singleFile, chromedriverFilename).absolutePath
+//*/
+//}
+//
+//palotasTest {
+//    print("entering palotasTest")
+//}
 
 
 
@@ -94,7 +94,7 @@ test {
 
 
 
-    dependsOn drivers.collect { tasks["${it}Test"] }
+    //dependsOn drivers.collect { tasks["${it}Test"] }
 
     System.setProperty("webdriver.chrome.driver", "/Users/gridfusion/Dowloads/chromedriver")
     System.setProperty("webdriver.gecko.driver", "/Users/gridfusion/Dowloads/geckodriver")
@@ -102,14 +102,13 @@ test {
     println("SYSTEM PROPERTY: " + System.properties['webdriver.gecko.driver'])
 
 
-    useTestNG() {
-        excludeGroups 'e2e'
-    }
+    //useTestNG() {
+    //    excludeGroups 'e2e'
+    //}
 
     testLogging {
         events "passed", "skipped", "failed", "standardOut", "standardError"
     }
-    println("running test task")
 
 }
 
@@ -122,9 +121,9 @@ task envSetup {
 
 }
 
-task e2eTest(type:Test, dependsOn: "envSetup") {
+task testngtests(type:Test, dependsOn: "envSetup") {
 //    https://ferritedog.wordpress.com/2012/08/02/gradle-and-testng-grouping-the-test-runs/
-    println("entering e2e test task")
+    println("entering testng test task")
 
     //dependsOn drivers.collect { tasks["${it}Test"] }
 
@@ -137,8 +136,6 @@ task e2eTest(type:Test, dependsOn: "envSetup") {
     testLogging {
         events "passed", "skipped", "failed", "standardOut", "standardError"
     }
-    println("running test task")
-
 }
 
 task junittests(type:Test, dependsOn: "envSetup") {
@@ -146,6 +143,10 @@ task junittests(type:Test, dependsOn: "envSetup") {
     println("entering junit test task")
     maxParallelForks = Runtime.runtime.availableProcessors()
 
+    filter {
+        //http://stackoverflow.com/questions/22505533/how-to-run-a-one-test-class-only-on-gradle
+        includeTestsMatching "*JUnit*"
+    }
 
     //dependsOn drivers.collect { tasks["${it}Test"] }
 
@@ -157,6 +158,35 @@ task junittests(type:Test, dependsOn: "envSetup") {
     }
 }
 
+
+task spocktests(type:Test) {
+    println("entering spock test task")
+    maxParallelForks = 2
+
+    /* Can pass all the properties: */
+    systemProperties System.getProperties()
+
+
+    filter {
+        //http://stackoverflow.com/questions/22505533/how-to-run-a-one-test-class-only-on-gradle
+        includeTestsMatching "*SpockSpec*"
+    }
+
+
+    reports {
+        html.destination = reporting.file("$name/tests")
+        junitXml.destination = file("$buildDir/test-results/$name")
+    }
+
+    outputs.upToDateWhen { false }  // Always run tests
+
+    systemProperty "geb.build.reportsDir", reporting.file("$name/geb")
+
+
+    testLogging {
+        events "passed", "skipped", "failed", "standardOut", "standardError"
+    }
+}
 
 /*
 test {

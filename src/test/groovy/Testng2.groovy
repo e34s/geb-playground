@@ -6,38 +6,32 @@ import org.openqa.selenium.chrome.ChromeDriver
 import org.testng.Assert
 import org.testng.annotations.Test
 
-class Testng2 implements GebReportingTestTrait {
+class Testng2 implements GebTestTrait {
 
 
-    @Test(groups = "e2e")
+    @Test(groups = "off")
     void test1() {
+//        go ("http://www.google.com")
+//
+//        println("Page title: " + getTitle())
+//        getTitle() == "Google"
+//        CachingDriverFactory.clearCacheAndQuitDriver()
+        Thread.sleep(5000)
 
-        def browser1 = new Browser()
-        browser1.driver = new ChromeDriver()
-
-        browser1.go "http://spiegel.de"
-
-        println("Page title: " + browser1.getTitle())
-        try {
-            assert browser1.getTitle() == "SPIEGEL ONLINE - Aktuelle Nachrichten"
-        }
-        finally {
-            browser1.quit()
-        }
-        //CachingDriverFactory.clearCacheAndQuitDriver()
 
     }
 
 
 
-    @Test(groups = "e2e")
+    @Test(groups = "off")
     void test2() {
+//        go ("http://www.google.com")
+//
+//        println("Page title: " + getTitle())
+//        getTitle() == "Google"
+//        CachingDriverFactory.clearCacheAndQuitDriver()
+        Thread.sleep(5000)
 
-        to GebishOrgHomePage
-
-        println("Page title: " + browser.getTitle())
-        quit()
-        //CachingDriverFactory.clearCacheAndQuitDriver()
     }
 
 }

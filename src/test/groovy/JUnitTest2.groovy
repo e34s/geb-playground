@@ -7,7 +7,7 @@ class JUnitTest2 implements GebReportingTestTrait {
     void junit3() {
 
         println("junit1 test running ")
-        Thread.sleep(5000)
+        Thread.sleep(1000)
 
         //CachingDriverFactory.clearCacheAndQuitDriver()
 
@@ -17,7 +17,7 @@ class JUnitTest2 implements GebReportingTestTrait {
     void junit4() {
 
         println("junit2 test running ")
-        Thread.sleep(5000)
+        Thread.sleep(1000)
 
         //CachingDriverFactory.clearCacheAndQuitDriver()
 

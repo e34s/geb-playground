@@ -1,42 +1,52 @@
 import geb.Browser
+import geb.driver.CachingDriverFactory
 import geb.testng.GebTestTrait
+import org.openqa.selenium.WebDriver
+import org.openqa.selenium.chrome.ChromeDriver
+import org.openqa.selenium.remote.RemoteWebDriver
 import org.testng.Assert
+import org.testng.annotations.AfterTest
+import org.testng.annotations.BeforeTest
 import org.testng.annotations.Test
 
 
 
 class Testng1 implements GebTestTrait {
 
+    @BeforeTest
+    public void setup() {
+        println("SETUP")
+        System.setProperty("webdriver.chrome.driver", "/Users/gridfusion/Downloads/chromedriver")
+        driver = new ChromeDriver();
+    }
 
-    @Test(groups = "disabled")
+    @Test(groups = "e2e")
     void test1() {
 
-        Browser.drive {
-            to GebishOrgHomePage
-        }
+        go ("http://www.google.com")
 
-        Thread.sleep(1000);
-        println("test number one")
-        Assert.assertTrue(true)
-
+        //println("Page title: " + getTitle())
+        //getTitle() == "Google"
+        Thread.sleep(5000)
     }
 
 
 
-    @Test(groups = "disabled")
+    @Test(groups = "e2e")
     void test2() {
+        go ("http://www.google.com")
+
+        //println("Page title: " + getTitle())
+        //getTitle() == "Google"
+        Thread.sleep(5000)
+        //CachingDriverFactory.clearCacheAndQuitDriver()
+    }
 
 
-        Browser.drive {
-            to GebishOrgHomePage
-        }
-
-
-        Thread.sleep(1000);
-
-        println("test number two")
-        Assert.assertTrue(true)
-
+    @AfterTest
+    public void cleanup() {
+        println("CLEANUP")
+        driver.quit()
     }
 
 }
